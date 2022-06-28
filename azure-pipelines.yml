@@ -8,19 +8,19 @@ trigger:
   batch: true
   branches:
     include:
-      - "*"
+      - "main"
 
 variables:
 - name: SolutionBaseName
-  value: __SolutionBaseName__ #PLACEHOLDER
+  value: SFA.DAS.RecruitV1.Api #PLACEHOLDER
 - name: DACPACSolutionBaseName
-    value: __DACPACSolutionBaseName__ #PLACEHOLDER
+    value: SFA.DAS.RecruitV1.Database #PLACEHOLDER
 - name: BuildConfiguration
   value: release
 - name: BuildPlatform
   value: any cpu
 - group: RELEASE Management Resources
-- group: __ReleaseVariableGroupName__ #PLACEHOLDER
+- group: RELEASE das-recruit-v1-api
 - name: Deploy
   value: $[or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.Reason'], 'Manual'), eq(variables['Build.Reason'], 'PullRequest'))]
 
@@ -31,12 +31,12 @@ resources:
   - repository: das-platform-building-blocks
     type: github
     name: SkillsFundingAgency/das-platform-building-blocks
-    ref: refs/tags/__LATESTRELEASETAG__ #PLACEHOLDER
+    ref: refs/tags/0.4.63
     endpoint: SkillsFundingAgency
   - repository: das-platform-automation
     type: github
     name: SkillsFundingAgency/das-platform-automation
-    ref: refs/tags/__LATESTRELEASETAG__ #PLACEHOLDER
+    ref: refs/tags/5.0.6
     endpoint: SkillsFundingAgency
   pipelines:
   - pipeline: das-employer-config
@@ -68,7 +68,9 @@ stages:
     parameters:
       Environment: AT
       SolutionBaseName: $(SolutionBaseName)
+      DACPACSolutionBaseName: $(DACPACSolutionBaseName)
       ServiceConnection: SFA-DAS-DevTest-ARM
+      OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss }}
 
 # - stage: Deploy_TEST
 #   dependsOn: Build
@@ -80,7 +82,10 @@ stages:
 #   - template: pipeline-templates/job/deploy.yml
 #     parameters:
 #       Environment: TEST
+#       SolutionBaseName: $(SolutionBaseName)
+#       DACPACSolutionBaseName: $(DACPACSolutionBaseName)
 #       ServiceConnection: SFA-DAS-DevTest-ARM
+#       OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss }}
 
 # - stage: Deploy_TEST2
 #   dependsOn: Build
@@ -92,7 +97,10 @@ stages:
 #   - template: pipeline-templates/job/deploy.yml
 #     parameters:
 #       Environment: TEST2
+#       SolutionBaseName: $(SolutionBaseName)
+#       DACPACSolutionBaseName: $(DACPACSolutionBaseName)
 #       ServiceConnection: SFA-DAS-DevTest-ARM
+#       OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss }}
 
 # - stage: Deploy_PP
 #   dependsOn: Build
@@ -104,7 +112,10 @@ stages:
 #   - template: pipeline-templates/job/deploy.yml
 #     parameters:
 #       Environment: PP
+#       SolutionBaseName: $(SolutionBaseName)
+#       DACPACSolutionBaseName: $(DACPACSolutionBaseName)
 #       ServiceConnection: SFA-DIG-PreProd-ARM
+#       OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss }}
 
 # - stage: Deploy_PROD
 #   dependsOn: Build
@@ -117,7 +128,10 @@ stages:
 #   - template: pipeline-templates/job/deploy.yml
 #     parameters:
 #       Environment: PROD
+#       SolutionBaseName: $(SolutionBaseName)
+#       DACPACSolutionBaseName: $(DACPACSolutionBaseName)
 #       ServiceConnection: SFA-DIG-Prod-ARM
+#       OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss }}
 
 # - stage: Deploy_MO
 #   dependsOn: Build
@@ -129,7 +143,10 @@ stages:
 #   - template: pipeline-templates/job/deploy.yml
 #     parameters:
 #       Environment: MO
+#       SolutionBaseName: $(SolutionBaseName)
+#       DACPACSolutionBaseName: $(DACPACSolutionBaseName)
 #       ServiceConnection: SFA-ASM-ModelOffice-ARM
+#       OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss }}
 
 # - stage: Deploy_DEMO
 #   dependsOn: Build
@@ -141,4 +158,7 @@ stages:
 #   - template: pipeline-templates/job/deploy.yml
 #     parameters:
 #       Environment: DEMO
+#       SolutionBaseName: $(SolutionBaseName)
+#       DACPACSolutionBaseName: $(DACPACSolutionBaseName)
 #       ServiceConnection: SFA-DAS-DevTest-ARM
+#       OverrideBlockOnPossibleDataLoss: ${{ parameters.OverrideBlockOnPossibleDataLoss }}
